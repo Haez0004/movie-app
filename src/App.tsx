@@ -3,19 +3,25 @@ import { fetchPopularMovies } from './api/tmdb';
 import type { Movie } from './types';
 import MovieCard from './components/MovieCard';
 import MovieCardSkeleton from './components/MovieCardSkeleton';
+import { searchMovies } from './api/tmdb';
+import { useDebounce } from './hooks/useDebounce';
 
 export default function App() {
     const [movies, setMovies] = useState<Movie[]>([]);
 const [error, setError] = useState('');
 const [loading, setLoading] = useState(true);
 const [attempt, setAttempt] = useState(0);
+const [query, setQuery] = useState('');
+const debouncedQuery = useDebounce(query.trim());
 
 useEffect(() => {
   async function load() {
   setLoading(true);
   setError('');
     try {
-      const data = await fetchPopularMovies();
+      const data = debouncedQuery
+       ? await searchMovies(debouncedQuery)
+      : await fetchPopularMovies();
       setMovies(data.results);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
@@ -24,11 +30,19 @@ useEffect(() => {
   }
   }
   load();
-}, [attempt]);
+}, [attempt, debouncedQuery]);
    return (
     <div className="p-4">
       <h1 className="text-2xl font-bold">Movie app is alive</h1>
       <p className="mt-1 text-muted">Dark theme test</p>
+      <input
+        type="search"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+         placeholder="Search movies..."
+         aria-label="Search movies"
+        className="mt-4 w-full rounded-lg border border-line bg-surface p-3 text-ink placeholder:text-muted"
+      />
         {error && (
   <div role="alert" className="mt-4 rounded-xl border border-line bg-surface p-4">
     <p className="font-semibold">Could not load movies</p>
