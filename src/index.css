@@ -1,0 +1,25 @@
+@import 'tailwindcss';
+
+:root {
+  color-scheme: dark;
+  --canvas: #0b0d12;
+  --surface: #151922;
+  --line: #262c3a;
+  --ink: #e8eaf0;
+  --muted: #8d95a8;
+  --accent: #f5b014;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+}
+
+body {
+  background-color: var(--canvas);
+  color: var(--ink);
+}
