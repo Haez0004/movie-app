@@ -56,6 +56,11 @@ useEffect(() => {
   </div>
 )}
       {loading && <p className="sr-only" role="status">Loading movies</p>}
+    {!loading && !error && movies.length === 0 && (
+  <p className="mt-6 text-center text-muted">
+    No movies found for "{debouncedQuery}". Try a different title.
+  </p>
+)}
      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {loading
        ? Array.from({ length: 10 }, (_, i) => <MovieCardSkeleton key={i} />)
