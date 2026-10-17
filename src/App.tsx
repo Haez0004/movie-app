@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { fetchPopularMovies } from './api/tmdb';
-import type { Movie } from './types';
+import { fetchPopularMovies, fetchGenres } from './api/tmdb';
+import type { Movie, Genre } from './types';
 import MovieCard from './components/MovieCard';
 import MovieCardSkeleton from './components/MovieCardSkeleton';
 import { searchMovies } from './api/tmdb';
 import { useDebounce } from './hooks/useDebounce';
+import GenreChips from './components/GenreChips';
 
 export default function App() {
     const [movies, setMovies] = useState<Movie[]>([]);
@@ -13,6 +14,12 @@ const [loading, setLoading] = useState(true);
 const [attempt, setAttempt] = useState(0);
 const [query, setQuery] = useState('');
 const debouncedQuery = useDebounce(query.trim());
+const [genres, setGenres] = useState<Genre[]>([]);
+const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
+
+useEffect(() => {
+  fetchGenres().then(setGenres).catch(() => setGenres([]));
+}, []);
 
 useEffect(() => {
   async function load() {
@@ -21,7 +28,7 @@ useEffect(() => {
     try {
       const data = debouncedQuery
        ? await searchMovies(debouncedQuery)
-      : await fetchPopularMovies();
+      : await fetchPopularMovies(1, selectedGenre ?? undefined);
       setMovies(data.results);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
@@ -30,7 +37,7 @@ useEffect(() => {
   }
   }
   load();
-}, [attempt, debouncedQuery]);
+}, [attempt, debouncedQuery, selectedGenre]);
    return (
     <div className="p-4">
       <h1 className="text-2xl font-bold">Movie app is alive</h1>
@@ -42,6 +49,11 @@ useEffect(() => {
          placeholder="Search movies..."
          aria-label="Search movies"
         className="mt-4 w-full rounded-lg border border-line bg-surface p-3 text-ink placeholder:text-muted"
+      />
+      <GenreChips
+       genres={genres}
+       selectedId={selectedGenre}
+       onSelect={setSelectedGenre}
       />
         {error && (
   <div role="alert" className="mt-4 rounded-xl border border-line bg-surface p-4">
