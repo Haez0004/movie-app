@@ -24,3 +24,28 @@ export interface Genre {
 export interface GenreListResponse {
   genres: Genre[];
 }
+export interface MovieDetail extends Omit<Movie, 'genre_ids'> {
+  runtime: number | null;
+  tagline: string;
+  genres: Genre[];
+}
+
+export interface CastMember {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+}
+
+export interface Video {
+  id: string;
+  key: string;
+  name: string;
+  site: string;
+  type: string;
+}
+
+export interface MovieDetailResponse extends MovieDetail {
+  credits: { cast: CastMember[] };
+  videos: { results: Video[] };
+}

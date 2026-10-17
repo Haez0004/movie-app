@@ -1,4 +1,4 @@
-import type { MovieListResponse, GenreListResponse } from '../types';
+import type { MovieListResponse, GenreListResponse, MovieDetailResponse } from '../types';
 export const BASE_URL = 'https://api.themoviedb.org/3';
 
 export const API_KEY: string | undefined = import.meta.env.VITE_TMDB_KEY;
@@ -42,4 +42,13 @@ export async function fetchGenres() {
   if (!res.ok) throw new Error('Failed to load genres');
   const data: GenreListResponse = await res.json();
   return data.genres;
+}
+
+export async function fetchMovieDetails(id: number) {
+  const res = await fetch(
+    `${BASE_URL}/movie/${id}?api_key=${API_KEY}&append_to_response=credits,videos`
+  );
+  if (!res.ok) throw new Error('Failed to load movie details');
+  const data: MovieDetailResponse = await res.json();
+  return data;
 }

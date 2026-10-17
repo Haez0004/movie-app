@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import type { Movie } from '../types';
 import { imageUrl } from '../api/tmdb';
 
@@ -6,11 +7,11 @@ interface MovieCardProps {
 }
 
 export default function MovieCard({ movie }: MovieCardProps) {
-  const poster = imageUrl(movie.poster_path);
+const poster = imageUrl(movie.poster_path);
 const year = movie.release_date ? movie.release_date.slice(0, 4) : 'TBA';
 
   return (
-    <article className="overflow-hidden rounded-xl border border-line bg-surface">
+    <Link to={`/movie/${movie.id}`} className="block overflow-hidden rounded-xl border border-line bg-surface">
       <div className="relative aspect-[2/3] bg-line">
         {poster && (
           <img
@@ -30,6 +31,6 @@ const year = movie.release_date ? movie.release_date.slice(0, 4) : 'TBA';
     <p className="mt-1 text-xs text-muted">{year}</p>
     </div>
       </div>
-    </article>
+    </Link>
   );
 }
