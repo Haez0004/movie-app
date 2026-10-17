@@ -8,7 +8,7 @@ const features = [
   'Save favorites to your watchlist',
 ];
 
-const tech = ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'React Router', 'TMDB API'];
+const tech = ['React', 'TypeScript', 'Vite', 'Tailwind CSS', 'React Router', 'TMDB API', 'PWA/Service Worker.js',];
 
 export default function AboutPage() {
   return (
