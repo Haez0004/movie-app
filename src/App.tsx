@@ -16,6 +16,8 @@ const [query, setQuery] = useState('');
 const debouncedQuery = useDebounce(query.trim());
 const [genres, setGenres] = useState<Genre[]>([]);
 const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
+const [page, setPage] = useState(1);
+const [totalPages, setTotalPages] = useState(1);
 
 useEffect(() => {
   fetchGenres().then(setGenres).catch(() => setGenres([]));
@@ -30,6 +32,8 @@ useEffect(() => {
        ? await searchMovies(debouncedQuery)
       : await fetchPopularMovies(1, selectedGenre ?? undefined);
       setMovies(data.results);
+      setPage(1);
+      setTotalPages(data.total_pages);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
@@ -38,6 +42,18 @@ useEffect(() => {
   }
   load();
 }, [attempt, debouncedQuery, selectedGenre]);
+async function loadMore() {
+  const nextPage = page + 1;
+  try {
+    const data = debouncedQuery
+      ? await searchMovies(debouncedQuery, nextPage)
+      : await fetchPopularMovies(nextPage, selectedGenre ?? undefined);
+    setMovies((prev) => [...prev, ...data.results]);
+    setPage(nextPage);
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Something went wrong');
+  }
+}
    return (
     <div className="p-4">
       <h1 className="text-2xl font-bold">Movie app is alive</h1>
@@ -77,7 +93,15 @@ useEffect(() => {
           {loading
        ? Array.from({ length: 10 }, (_, i) => <MovieCardSkeleton key={i} />)
        : movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)}
-      </div>
+  {!loading && !error && page < totalPages && (
+  <button
+    onClick={loadMore}
+    className="mx-auto mt-6 block rounded-full border border-accent px-6 py-2 text-accent"
+  >
+    Load more
+  </button>
+)}
+     </div>
     </div>
   );
 }
