@@ -16,7 +16,6 @@ Done:
 - Movie detail page (React Router, cast, trailer)
 - Watchlist saved in localStorage (custom hook useLocalStorage)
 - About page with TMDB attribution notice (required)
-
-Next
 - PWA, README with screenshots, deploy to Vercel with VITE_TMDB_KEY set there
+Next
 - Add the app to the portfolio (mywebsite) and run ./deploy.sh
