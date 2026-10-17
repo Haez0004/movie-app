@@ -14,9 +14,9 @@ Done:
 - Genre filter chips (fetch /genre/movie/list)
 - Load more (pagination with total_pages)
 - Movie detail page (React Router, cast, trailer)
-
-Next:
 - Watchlist saved in localStorage (custom hook useLocalStorage)
 - About page with TMDB attribution notice (required)
+
+Next
 - PWA, README with screenshots, deploy to Vercel with VITE_TMDB_KEY set there
 - Add the app to the portfolio (mywebsite) and run ./deploy.sh
