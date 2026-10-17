@@ -1,13 +1,15 @@
+import { useLocalStorage } from './hooks/useLocalStorage';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { fetchMovieDetails, imageUrl } from './api/tmdb';
-import type { MovieDetailResponse } from './types';
+import type {Movie,  MovieDetailResponse } from './types';
 
 export default function MovieDetailPage() {
   const { id } = useParams();
   const [movie, setMovie] = useState<MovieDetailResponse | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [watchlist, setWatchlist] = useLocalStorage<Movie[]>('watchlist', []);
 
   useEffect(() => {
     async function load() {
@@ -28,6 +30,26 @@ export default function MovieDetailPage() {
   if (loading) return <p className="p-4 text-muted">Loading...</p>;
   if (error || !movie) return <p className="p-4">{error || 'Movie not found'}</p>;
 
+const saved = watchlist.some((m) => m.id === movie.id);
+
+function toggleWatchlist() {
+  if (!movie) return;
+  if (saved) {
+    setWatchlist((prev) => prev.filter((m) => m.id !== movie.id));
+  } else {
+    const entry: Movie = {
+      id: movie.id,
+      title: movie.title,
+      overview: movie.overview,
+      poster_path: movie.poster_path,
+      backdrop_path: movie.backdrop_path,
+      release_date: movie.release_date,
+      vote_average: movie.vote_average,
+      genre_ids: movie.genres.map((g) => g.id),
+    };
+    setWatchlist((prev) => [...prev, entry]);
+  }
+}
   const trailer = movie.videos.results.find(
     (v) => v.site === 'YouTube' && v.type === 'Trailer'
   );
@@ -51,6 +73,15 @@ export default function MovieDetailPage() {
           </span>
         ))}
       </div>
+     <button
+      onClick={toggleWatchlist}
+      className={`mt-4 rounded-full border border-accent px-5 py-2 text-sm ${
+      saved ? 'bg-accent text-canvas' : 'text-accent'
+      }`}
+    >
+       {saved ? '✓ In watchlist' : '+ Add to watchlist'}
+    </button>
+
       <p className="mt-4">{movie.overview}</p>
 
       {trailer && (

@@ -11,11 +11,11 @@ Done:
 - src/components/MovieCard.tsx (poster, title, year, gold rating)
 - src/components/MovieCardSkeleton.tsx
 - App.tsx: loading skeletons, error box with Try again, debounced search, no results message
-
-Next:
 - Genre filter chips (fetch /genre/movie/list)
 - Load more (pagination with total_pages)
 - Movie detail page (React Router, cast, trailer)
+
+Next:
 - Watchlist saved in localStorage (custom hook useLocalStorage)
 - About page with TMDB attribution notice (required)
 - PWA, README with screenshots, deploy to Vercel with VITE_TMDB_KEY set there

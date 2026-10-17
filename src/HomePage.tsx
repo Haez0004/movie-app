@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { fetchPopularMovies, fetchGenres } from './api/tmdb';
 import type { Movie, Genre } from './types';
@@ -56,8 +57,14 @@ async function loadMore() {
 }
    return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold">Movie app is alive</h1>
-      <p className="mt-1 text-muted">Dark theme test</p>
+      <h1 className="text-2xl font-bold">Hk</h1>
+      <p className="mt-1 text-muted">Find your next favorite movie.</p>
+      <Link to="/watchlist" className="mt-2 inline-block text-accent">
+      My Watchlist
+     </Link>
+     <Link to="/about" className="ml-4 inline-block text-sm text-muted">
+      About
+      </Link>
       <input
         type="search"
         value={query}
